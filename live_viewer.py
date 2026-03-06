@@ -5,7 +5,7 @@ import bettercam
 def run_live_viewer():
     # 1. WICHTIG: Pfad zu eurem AKTUELLSTEN Modell anpassen!
     # Schaut in den Ordner runs/detect/..., wie euer letzter Run hieß
-    model_path = "runs/detect/brawli_cpu3/weights/best.pt" 
+    model_path = "runs/detect/brawli_cpu_v3/weights/best.pt" 
     
     print(f"Lade KI-Modell von: {model_path} ...")
     try:
