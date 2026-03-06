@@ -24,8 +24,13 @@ def save_worker():
     while True:
         img, filename = image_queue.get()
         if img is None: break
-        # Resize direkt beim Speichern spart I/O Last
-        img_resized = cv2.resize(img, TARGET_SIZE)
+        
+        # --- HIER IST DER FIX: Farben von RGB zu BGR umwandeln ---
+        img_bgr = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+        
+        # Resize direkt beim Speichern spart I/O Last (jetzt mit dem gefixten Bild)
+        img_resized = cv2.resize(img_bgr, TARGET_SIZE)
+        
         cv2.imwrite(filename, img_resized, [int(cv2.IMWRITE_JPEG_QUALITY), 85])
         image_queue.task_done()
 
