@@ -1,22 +1,20 @@
 from ultralytics import YOLO
 
 def start_training():
-    print("--- STARTE TRAINING (RUNDE 2) AUF DER CPU ---")
-    print("Die KI wird jetzt noch schlauer gemacht!")
+    print("--- STARTE TRAINING (2 KLASSEN: ME vs ENEMY) ---")
     
-    # 1. Wir laden jetzt EUER trainiertes Modell (das Gehirn aus Runde 1)
-    # WICHTIG: Prüft in euren Ordnern, ob der Pfad exakt stimmt. 
-    # Falls euer letzter Ordner z.B. brawli_cpu2 hieß, ändert das "brawli_cpu" hier ab!
-    model = YOLO("runs/detect/brawli_cpu_v2/weights/best.pt") 
+    # 1. HIER euer Version 3 Modell eintragen! 
+    # (Schaut nach, ob der Ordner brawli_cpu3 oder v3 heißt)
+    model = YOLO("runs/detect/brawli_cpu_v3/weights/best.pt") 
 
-    # 2. Training fortsetzen
+    # 2. Training starten
     model.train(
-        data="data.yaml",
-        epochs=50,            # Wir geben ihm wieder 50 Runden für die neuen Bilder
+        data="data.yaml",     # WICHTIG: Hier muss jetzt nc: 2 drinstehen!
+        epochs=50,            
         imgsz=640,
         batch=8,           
-        device="cpu",         # Wir bleiben sicherheitshalber auf der CPU
-        name="brawli_cpu_v3", # NEUER NAME: Speichert das neue Modell in einem neuen Ordner
+        device="cpu",         
+        name="brawli_2classes_v1", # Neuer Name, damit wir wissen, dass das hier das 2-Klassen-Modell ist
         plots=True
     )
 
