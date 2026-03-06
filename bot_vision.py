@@ -6,7 +6,7 @@ import numpy as np
 def run_bot_vision():
     # 1. Lade dein trainiertes Modell (Das ist euer Goldstück!)
     # WICHTIG: Prüft, ob der Pfad stimmt. Manchmal heißt der Ordner brawli_cpu2 oder brawli_cpu3
-    model_path = "runs/detect/brawli_cpu/weights/best.pt" 
+    model_path = "yolo11n.pt" 
     
     print(f"Lade KI-Modell von: {model_path} ...")
     try:
