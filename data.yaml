@@ -1,8 +1,8 @@
 # Pfade zu den Daten (relativ zum Hauptordner)
 path: dataset/train
 train: images
-val: images  # Am Anfang nehmen wir die gleichen Bilder zum Testen
+val: images
 
-# Klassen-Definition (basierend auf eurer JSON)
-nc: 1
-names: ['player']
+# Klassen-Definition für 2 Objekte
+nc: 2
+names: ['me', 'enemy']
