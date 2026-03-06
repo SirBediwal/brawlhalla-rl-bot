@@ -2,21 +2,23 @@ from ultralytics import YOLO
 import torch_directml
 
 def start_training():
-    # Wir nutzen das DirectML Device für AMD
+    # DirectML Device für die AMD-Karte
     device = torch_directml.device()
     print(f"AMD Power aktiviert! Training läuft auf: {device}")
 
-    # 1. Modell laden
+    # Modell laden
     model = YOLO("yolo11n.pt") 
 
-    # 2. Training starten
+    # Training starten mit den AMD-Fixes
     model.train(
         data="data.yaml",
         epochs=50,
         imgsz=640,
         batch=16,
-        device=device, # Hier wird jetzt die 7900 XTX genutzt!
-        name="brawli_amd_v1"
+        device=device,
+        amp=False,          # <--- DAS IST DER ENTSCHEIDENDE FIX!
+        name="brawli_amd_v1",
+        plots=True
     )
 
 if __name__ == "__main__":
