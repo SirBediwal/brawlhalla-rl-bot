@@ -3,7 +3,7 @@ import torch_directml
 
 def start_training():
     # DirectML Device für die AMD-Karte
-    device = torch_directml.device()
+    device="cpu"
     print(f"AMD Power aktiviert! Training läuft auf: {device}")
 
     # Modell laden
