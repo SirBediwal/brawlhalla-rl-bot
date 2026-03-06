@@ -4,11 +4,11 @@ import shutil
 from ultralytics import YOLO
 
 def run_fast_labeler():
-    # 1. Pfade konfigurieren
-    model_path = "runs/detect/brawli_cpu_v2/weights/best.pt"
+    # 1. WICHTIG: Pfad zu eurem NEUEN 2-Klassen-Modell!
+    # Checkt kurz, ob der Ordner wirklich brawli_2classes_v1 heißt.
+    model_path = "runs/detect/brawli_2classes_v1/weights/best.pt"
     input_folder = "data/raw_screenshots" 
     
-    # Hier speichern wir die GUTE Beute direkt ab, bereit fürs nächste Training!
     out_images = "dataset/train/images"
     out_labels = "dataset/train/labels"
 
@@ -20,17 +20,16 @@ def run_fast_labeler():
     try:
         model = YOLO(model_path)
     except Exception:
-        print("Fehler: Modell nicht gefunden!")
+        print("Fehler: Modell nicht gefunden! Stimmt der Pfad in Zeile 9?")
         return
 
-    print("\n--- FAST LABELER GESTARTET ---")
-    print("Steuerung im Bild-Fenster:")
-    print(" [ Y ] = PERFEKT! Speichern.")
-    print(" [ N ] = FALSCH/UNGENAU. Überspringen.")
+    print("\n--- FAST LABELER (2 KLASSEN) GESTARTET ---")
+    print("Prüfe, ob die KI 'me' und 'enemy' richtig erkannt hat!")
+    print(" [ Y ] = PERFEKT! Beide richtig erkannt -> Speichern.")
+    print(" [ N ] = FALSCH (z.B. vertauscht). -> Überspringen.")
     print(" [ Q ] = BEENDEN.")
-    print("------------------------------\n")
+    print("------------------------------------------\n")
 
-    # Alle Bilder im Ordner durchgehen
     for filename in os.listdir(input_folder):
         if not filename.lower().endswith((".jpg", ".png")):
             continue
@@ -41,48 +40,42 @@ def run_fast_labeler():
         results = model.predict(img_path, conf=0.4, verbose=False)
         boxes = results[0].boxes
 
-        # Wenn er NICHTS findet, überspringen wir es direkt automatisch
         if len(boxes) == 0:
             continue
 
-        # Bild mit gezeichneten Boxen anzeigen
+        # Bild mit gezeichneten Boxen UND NAMEN anzeigen
         annotated_frame = results[0].plot()
         
-        # Fenster etwas kleiner machen, damit es gut auf den Screen passt
         cv2.imshow("Fast Labeler (Y=Ja, N=Nein, Q=Ende)", cv2.resize(annotated_frame, (960, 540)))
 
-        # Warten auf Tastendruck
         key = cv2.waitKey(0) & 0xFF
 
         if key == ord('y'):
             # BILD WAR GUT -> Speichern!
-            # 1. Bild rüberkopieren
             shutil.copy(img_path, os.path.join(out_images, filename))
             
-            # 2. YOLO Textdatei erstellen
             txt_filename = filename.replace(".jpg", ".txt").replace(".png", ".txt")
             with open(os.path.join(out_labels, txt_filename), "w") as f:
                 for i in range(len(boxes)):
+                    # HIER IST DIE MAGIE: Wir nehmen jetzt die echte Klasse der KI (0 oder 1)
                     cls = int(boxes.cls[i].item())
                     x, y, w, h = boxes.xywhn[i].tolist()
-                    f.write(f"0 {x:.6f} {y:.6f} {w:.6f} {h:.6f}\n") # Wir erzwingen Klasse 0
+                    
+                    # Speichert dynamisch 0 oder 1 in die Textdatei
+                    f.write(f"{cls} {x:.6f} {y:.6f} {w:.6f} {h:.6f}\n") 
             
             print(f"[+] GESPEICHERT: {filename}")
-            
-            # (Optional) Original löschen, damit es nicht nochmal drankommt
             os.remove(img_path) 
 
         elif key == ord('q'):
             print("Beendet!")
             break
         else:
-            # Bei 'N' oder jeder anderen Taste wird das Bild einfach übersprungen
             print(f"[-] ÜBERSPRUNGEN: {filename}")
-            # (Optional) Original löschen, damit es nicht nochmal drankommt
             os.remove(img_path)
 
     cv2.destroyAllWindows()
-    print("\nFertig! Deine neuen, perfekten Daten liegen im dataset/train Ordner.")
+    print("\nFertig! Deine perfekten Daten liegen im dataset/train Ordner.")
 
 if __name__ == "__main__":
     run_fast_labeler()
