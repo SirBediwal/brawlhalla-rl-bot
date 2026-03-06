@@ -7,7 +7,7 @@ def start_training():
     # 1. Wir laden jetzt EUER trainiertes Modell (das Gehirn aus Runde 1)
     # WICHTIG: Prüft in euren Ordnern, ob der Pfad exakt stimmt. 
     # Falls euer letzter Ordner z.B. brawli_cpu2 hieß, ändert das "brawli_cpu" hier ab!
-    model = YOLO("runs/detect/brawli_cpu/weights/best.pt") 
+    model = YOLO("runs/detect/brawli_cpu_v2/weights/best.pt") 
 
     # 2. Training fortsetzen
     model.train(
@@ -16,7 +16,7 @@ def start_training():
         imgsz=640,
         batch=8,           
         device="cpu",         # Wir bleiben sicherheitshalber auf der CPU
-        name="brawli_cpu_v2", # NEUER NAME: Speichert das neue Modell in einem neuen Ordner
+        name="brawli_cpu_v3", # NEUER NAME: Speichert das neue Modell in einem neuen Ordner
         plots=True
     )
 
