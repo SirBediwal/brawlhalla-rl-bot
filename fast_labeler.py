@@ -5,7 +5,7 @@ from ultralytics import YOLO
 
 def run_fast_labeler():
     # 1. Pfade konfigurieren
-    model_path = "runs/detect/brawli_cpu/weights/best.pt"
+    model_path = "yolo11n.pt"
     input_folder = "data/raw_screenshots" 
     
     # Hier speichern wir die GUTE Beute direkt ab, bereit fürs nächste Training!
