@@ -1,23 +1,20 @@
 from ultralytics import YOLO
-import torch_directml
 
 def start_training():
-    # DirectML Device für die AMD-Karte
-    device="cpu"
-    print(f"AMD Power aktiviert! Training läuft auf: {device}")
-
+    print("--- STARTE TRAINING AUF DER CPU ---")
+    print("AMD-Karte wird ignoriert, um den DirectML-Fehler zu umgehen.")
+    
     # Modell laden
     model = YOLO("yolo11n.pt") 
 
-    # Training starten mit den AMD-Fixes
+    # Training starten - ACHTUNG: device="cpu" erzwingt den Prozessor!
     model.train(
         data="data.yaml",
         epochs=50,
         imgsz=640,
-        batch=16,
-        device=device,
-        amp=False,          # <--- DAS IST DER ENTSCHEIDENDE FIX!
-        name="brawli_amd_v1",
+        batch=8,           
+        device="cpu",      # <--- Hier darf NICHT 'device' oder 'privateuseone' stehen!
+        name="brawli_cpu",
         plots=True
     )
 
