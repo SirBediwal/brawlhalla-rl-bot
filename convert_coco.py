@@ -41,5 +41,5 @@ def convert_coco_to_yolo(json_path, output_dir):
 if __name__ == "__main__":
     # Pfade anpassen, falls sie bei euch anders heissen
     json_file = "datasets/train/_annotations.coco.json"
-    label_folder = "datasets/train/labels"
+    label_folder = "dataset/train"
     convert_coco_to_yolo(json_file, label_folder)
